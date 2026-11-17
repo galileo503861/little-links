@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f5f8">
+    <title>Little Links</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="mark" aria-hidden="true">↗</div>
+        <div>
+          <h1>Little Links</h1>
+          <p>A place for the tabs you meant to read.</p>
+        </div>
+      </header>
+
+      <form id="add-link" novalidate>
+        <div class="url-field">
+          <label for="url">Link</label>
+          <input id="url" type="text" inputmode="url" autocomplete="url" maxlength="2048" placeholder="example.com/something-good" aria-describedby="message">
+        </div>
+        <div class="title-field">
+          <label for="title">Label <span>(optional)</span></label>
+          <input id="title" type="text" maxlength="120" placeholder="What’s this one about?">
+        </div>
+        <button class="add" type="submit">Save link</button>
+      </form>
+      <p id="message" class="message" role="status"></p>
+
+      <section aria-label="Saved links">
+        <div class="list-heading">
+          <div class="filters" aria-label="Filter links">
+            <button type="button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="unread" aria-pressed="false">Unread</button>
+            <button type="button" data-filter="read" aria-pressed="false">Read</button>
+          </div>
+          <span id="count" aria-live="polite">0 left to read</span>
+        </div>
+        <ul id="links"></ul>
+        <p id="empty">Nothing saved yet. Drop a link in above.</p>
+        <button id="clear-read" class="clear-read" type="button" disabled>Clear read links</button>
+      </section>
+      <footer>Saved in this browser. Clear your browser data and the list goes with it.</footer>
+    </main>
+  </body>
+</html>
