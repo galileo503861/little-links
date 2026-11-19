@@ -22,6 +22,7 @@ button { cursor: pointer; }
 .add { border: 1px solid #3459aa; background: #3459aa; color: white; border-radius: 6px; padding: 11px 15px; font-size: 13px; min-height: 42px; }
 .add:hover { background: #25458f; }
 .message { margin: 9px 2px 19px; min-height: 21px; color: #a03d3d; font-size: 13px; line-height: 1.6; }
+.message[data-kind="success"] { color: #35634a; }
 .list-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
 .filters { display: flex; gap: 4px; }
 .filters button { background: transparent; border: 0; color: #657082; padding: 8px 13px; border-radius: 6px; font-size: 13px; }
@@ -42,6 +43,11 @@ button { cursor: pointer; }
 .clear-read { background: none; border: none; color: #6b7690; padding: 14px 0; font-size: 12px; }
 .clear-read:disabled { color: #9aa2b0; cursor: default; }
 .clear-read:not(:disabled):hover { text-decoration: underline; }
+.list-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 14px; margin-top: 5px; }
+.list-actions .clear-read { margin-right: auto; }
+.backup { background: none; border: 0; color: #52658e; padding: 14px 0; font-size: 12px; }
+.backup:disabled { color: #9aa2b0; cursor: default; }
+.backup:not(:disabled):hover { text-decoration: underline; }
 footer { margin-top: 26px; font-size: 11px; line-height: 1.7; color: #7a8393; }
 @media (max-width: 620px) {
   main { margin: 36px auto; padding: 0 18px; }

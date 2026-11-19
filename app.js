@@ -1,4 +1,5 @@
 import { addLink, filterLinks, readLinks } from "./links.js";
+import { makeBackup, parseBackup, mergeLinks } from "./backup.js";
 
 const storageKey = "little-links.items";
 const form = document.querySelector("#add-link");
@@ -11,20 +12,30 @@ const count = document.querySelector("#count");
 const filters = document.querySelectorAll("[data-filter]");
 const clearRead = document.querySelector("#clear-read");
 const searchInput = document.querySelector("#search");
+const exportButton = document.querySelector("#export");
+const importButton = document.querySelector("#import");
+const importFile = document.querySelector("#import-file");
 let filter = "all";
 let links = [];
 
 try {
   links = readLinks(localStorage.getItem(storageKey));
 } catch {
-  message.textContent = "Browser storage isn't available. You can still use this tab.";
+  setMessage("Browser storage isn't available. You can still use this tab.");
+}
+
+function setMessage(text, kind = "error") {
+  message.textContent = text;
+  message.dataset.kind = kind;
 }
 
 function save() {
   try {
     localStorage.setItem(storageKey, JSON.stringify(links));
+    return true;
   } catch {
-    message.textContent = "Couldn't save this change. Keep this tab open if you need the list.";
+    setMessage("Couldn't save this change. Keep this tab open if you need the list.");
+    return false;
   }
 }
 
@@ -32,6 +43,7 @@ function render() {
   const unread = links.filter((link) => !link.read).length;
   count.textContent = `${unread} left to read`;
   clearRead.disabled = links.every((link) => !link.read);
+  exportButton.disabled = links.length === 0;
   filters.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.filter === filter)));
 
   const visible = filterLinks(links, filter, searchInput.value);
@@ -53,7 +65,7 @@ function render() {
     checkbox.setAttribute("aria-label", `Mark ${link.title} as ${link.read ? "unread" : "read"}`);
     checkbox.addEventListener("change", () => {
       links = links.map((item) => item.id === link.id ? { ...item, read: checkbox.checked } : item);
-      message.textContent = "";
+      setMessage("");
       save();
       render();
     });
@@ -76,7 +88,7 @@ function render() {
     remove.setAttribute("aria-label", `Remove ${link.title}`);
     remove.addEventListener("click", () => {
       links = links.filter((item) => item.id !== link.id);
-      message.textContent = "";
+      setMessage("");
       save();
       render();
     });
@@ -87,7 +99,7 @@ function render() {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  message.textContent = "";
+  setMessage("");
   try {
     links = addLink(links, {
       id: crypto.randomUUID(),
@@ -101,7 +113,7 @@ form.addEventListener("submit", (event) => {
     render();
     urlInput.focus();
   } catch (problem) {
-    message.textContent = problem.message;
+    setMessage(problem.message);
   }
 });
 
@@ -114,9 +126,49 @@ searchInput.addEventListener("input", render);
 
 clearRead.addEventListener("click", () => {
   links = links.filter((link) => !link.read);
-  message.textContent = "";
+  setMessage("");
   save();
   render();
+});
+
+exportButton.addEventListener("click", () => {
+  const blob = new Blob([makeBackup(links)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "little-links.json";
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+importButton.addEventListener("click", () => importFile.click());
+importFile.addEventListener("change", async () => {
+  const file = importFile.files[0];
+  if (!file) return;
+  setMessage("");
+  importButton.disabled = true;
+  try {
+    if (file.size > 1024 * 1024) throw new Error("Choose a backup smaller than 1 MB.");
+    const imported = parseBackup(await file.text());
+    const merged = mergeLinks(links, imported);
+    const added = merged.length - links.length;
+    links = merged;
+    if (added > 0) {
+      filter = "all";
+      searchInput.value = "";
+    }
+    if (save()) {
+      setMessage(added > 0 ? `Imported ${added} ${added === 1 ? "link" : "links"}. Existing links were kept.` : "No new links to import.", "success");
+    }
+    render();
+  } catch (problem) {
+    setMessage(problem.message);
+  } finally {
+    importButton.disabled = false;
+    importFile.value = "";
+  }
 });
 
 render();

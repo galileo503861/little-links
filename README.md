@@ -6,6 +6,12 @@ Add a URL and an optional label, mark things as read, filter the list, or clear 
 
 Search by label or URL. Search works with the All, Unread and Read filters.
 
+## Backups
+
+Export JSON downloads the whole list, including read status, as `little-links.json`. Import JSON merges a backup into the current list without replacing existing links. Duplicate URLs keep the version already in this browser.
+
+Imports accept this app's version 1 backups up to 1 MB. Invalid files are rejected before changing the list. Keep a backup if you want to move to another browser or clear your browser data.
+
 ## Run
 
 No install or build step. Start a local server in this folder:
@@ -24,4 +30,4 @@ Requires Node 20 or newer:
 npm test
 ```
 
-The tests cover URL handling, duplicates, combined search filters and loading damaged saved data. The page uses text nodes for saved labels and only accepts HTTP/HTTPS links.
+The tests cover URL handling, duplicates, search filters, damaged saved data, backup validation and merging lists. The page uses text nodes for saved labels and only accepts HTTP/HTTPS links.

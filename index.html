@@ -44,9 +44,14 @@
         </div>
         <ul id="links"></ul>
         <p id="empty">Nothing saved yet. Drop a link in above.</p>
-        <button id="clear-read" class="clear-read" type="button" disabled>Clear read links</button>
+        <div class="list-actions">
+          <button id="clear-read" class="clear-read" type="button" disabled>Clear read links</button>
+          <button id="export" class="backup" type="button" disabled>Export JSON</button>
+          <button id="import" class="backup" type="button">Import JSON</button>
+          <input id="import-file" type="file" accept="application/json,.json" aria-label="Import a reading list backup" hidden>
+        </div>
       </section>
-      <footer>Saved in this browser. Clear your browser data and the list goes with it.</footer>
+      <footer>Saved in this browser. Export a backup before clearing browser data, or import it on another device.</footer>
     </main>
   </body>
 </html>
