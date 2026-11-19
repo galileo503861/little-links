@@ -4,6 +4,8 @@ A reading list for links that would otherwise sit in an open tab forever.
 
 Add a URL and an optional label, mark things as read, filter the list, or clear the links you've finished. The list is saved in this browser's local storage. It doesn't sync between devices.
 
+Search by label or URL. Search works with the All, Unread and Read filters.
+
 ## Run
 
 No install or build step. Start a local server in this folder:
@@ -22,4 +24,4 @@ Requires Node 20 or newer:
 npm test
 ```
 
-The tests cover URL handling, duplicate links and loading damaged saved data. The page uses text nodes for saved labels and only accepts HTTP/HTTPS links.
+The tests cover URL handling, duplicates, combined search filters and loading damaged saved data. The page uses text nodes for saved labels and only accepts HTTP/HTTPS links.

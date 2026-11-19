@@ -15,7 +15,8 @@ form { background: white; border: 1px solid #dce0e8; padding: 21px; border-radiu
 input, button { font: inherit; }
 label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
 label span { font-weight: 400; color: #737c8c; }
-input[type="text"] { width: 100%; min-width: 0; border: 1px solid #cbd1dc; padding: 11px; border-radius: 6px; color: inherit; font-size: 13px; min-height: 42px; }
+input[type="text"], input[type="search"] { width: 100%; min-width: 0; border: 1px solid #cbd1dc; padding: 11px; border-radius: 6px; color: inherit; font-size: 13px; min-height: 42px; }
+#search { margin-bottom: 14px; }
 input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #829ce2; outline-offset: 3px; }
 button { cursor: pointer; }
 .add { border: 1px solid #3459aa; background: #3459aa; color: white; border-radius: 6px; padding: 11px 15px; font-size: 13px; min-height: 42px; }

@@ -1,4 +1,4 @@
-import { addLink, readLinks } from "./links.js";
+import { addLink, filterLinks, readLinks } from "./links.js";
 
 const storageKey = "little-links.items";
 const form = document.querySelector("#add-link");
@@ -10,6 +10,7 @@ const message = document.querySelector("#message");
 const count = document.querySelector("#count");
 const filters = document.querySelectorAll("[data-filter]");
 const clearRead = document.querySelector("#clear-read");
+const searchInput = document.querySelector("#search");
 let filter = "all";
 let links = [];
 
@@ -33,12 +34,14 @@ function render() {
   clearRead.disabled = links.every((link) => !link.read);
   filters.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.filter === filter)));
 
-  const visible = links.filter((link) => filter === "all" || (filter === "read" ? link.read : !link.read));
+  const visible = filterLinks(links, filter, searchInput.value);
   list.replaceChildren();
   empty.hidden = visible.length > 0;
   empty.textContent = links.length === 0
     ? "Nothing saved yet. Drop a link in above."
-    : "Nothing in this view. Try another filter.";
+    : searchInput.value.trim()
+      ? "No matching links. Try another search or filter."
+      : "Nothing in this view. Try another filter.";
 
   for (const link of visible) {
     const row = document.createElement("li");
@@ -106,6 +109,8 @@ filters.forEach((button) => button.addEventListener("click", () => {
   filter = button.dataset.filter;
   render();
 }));
+
+searchInput.addEventListener("input", render);
 
 clearRead.addEventListener("click", () => {
   links = links.filter((link) => !link.read);

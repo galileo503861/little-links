@@ -27,6 +27,14 @@ export function addLink(links, entry) {
   return [{ ...entry, title, url }, ...links];
 }
 
+export function filterLinks(links, filter = "all", query = "") {
+  const search = query.trim().toLowerCase();
+  return links.filter((link) => {
+    const matchesStatus = filter === "all" || (filter === "read" ? link.read : !link.read);
+    return matchesStatus && `${link.title} ${link.url}`.toLowerCase().includes(search);
+  });
+}
+
 export function readLinks(raw) {
   try {
     const saved = JSON.parse(raw);
